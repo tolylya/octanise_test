@@ -4,3 +4,19 @@
 .full-width {
   width: 100%;
 }
+
+.blue {
+  color: #5bb7db;
+}
+
+.green {
+  color: #60b044;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}

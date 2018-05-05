@@ -14,7 +14,6 @@ class _Register extends React.PureComponent {
       handleSubmit,
       dirty
     } = this.props;
-    console.log(this.props);
 
     return (
       <div className="register_wrapper">

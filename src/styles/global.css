@@ -1,0 +1,6 @@
+@import "~antd/dist/antd.css";
+@import "spaces.css";
+
+.full-width {
+  width: 100%;
+}

@@ -1,0 +1,14 @@
+.login_wrapper {
+  width: 35%;
+  margin: 20% auto auto;
+}
+
+.login_btn {
+  width: 48%;
+}
+
+.login_btns {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}

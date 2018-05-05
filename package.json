@@ -29,6 +29,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "antd": "3.5.0",
+    "formik": "0.11.11",
     "object-assign": "4.1.0",
     "react": "15.5.4",
     "react-dom": "15.5.4",

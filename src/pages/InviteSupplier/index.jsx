@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Input } from 'antd';
+import { Button, Input, Modal, notification } from 'antd';
 import { withFormik } from 'formik';
 
 import Menu from '../../components/Menu';
@@ -8,12 +8,37 @@ import './index.css';
 
 class _InviteSupplier extends React.Component {
 
+  openEmailModal = () => {
+    Modal.info({
+      title: 'Email',
+      content: (
+        <div>
+          <h1>You has invited.</h1>
+          <div><a href="#test" target="_blank">Open invite link</a></div>
+        </div>
+      ),
+    });
+  }
+
+  openNotification = () => {
+    notification.success({
+      message: 'Email',
+      description: <span>
+        Email with invite link was sent to supplier. If you want to look at it press the button
+        <Button className="mt-xxs" type="primary" onClick={() => this.openEmailModal()}>Open email</Button>
+      </span>
+    });
+  };
+
+  handleSubmit = () => {
+    this.openNotification();
+  }
+
   render() {
     const {
       errors,
       handleChange,
       handleBlur,
-      handleSubmit,
       dirty
     } = this.props;
 
@@ -26,7 +51,7 @@ class _InviteSupplier extends React.Component {
           <Input placeholder="Last name" className="mt-xxs" name="lastName" onBlur={handleBlur} onChange={handleChange} />
           <Input placeholder="Email" className="mt-xxs" name="email" onBlur={handleBlur} onChange={handleChange} />
           <Input placeholder="Phone" className="mt-xxs" name="phone" onBlur={handleBlur} onChange={handleChange} />
-          <Button type="primary" className="mt-xs full-width" disabled={Object.keys(errors).length || !dirty} onClick={handleSubmit}>Send invite</Button>
+          <Button type="primary" className="mt-xs full-width" disabled={Object.keys(errors).length || !dirty} onClick={this.handleSubmit}>Send invite</Button>
         </div>
       </div>
     );
@@ -49,9 +74,6 @@ const InviteSupplier = withFormik({
 
     return errors;
   },
-  handleSubmit: (values, {props}) => {
-
-  }
 })(_InviteSupplier);
 
 export default InviteSupplier;

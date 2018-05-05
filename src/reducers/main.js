@@ -1,7 +1,7 @@
 import { NEW_CUSTOMER_REQUEST } from '../actions/mainActionTypes';
 
 export const initialState = {
-  user: {},
+  currentUser: {},
   customerRequests: [{
     key: Math.random(),
     location: 'Odessa',
@@ -18,7 +18,11 @@ export const initialState = {
     lastDate: '22-11-2018',
     supplier: 'Anatoliy Simonov',
     status: 'Approved'
-  }]
+  }],
+  suppliers: [
+    { firstName: 'Anatoliy', lastName: 'Simonov', email: 'test@mail.ru', supplierName: 'OOO Builder', phone: '+380647458745', id: Math.random() },
+    { firstName: 'Dmitry', lastName: 'Shatikov', email: 'test2@mail.ru', supplierName: 'OOO Skynet', phone: '+380627538745', id: Math.random() },
+  ],
 };
 
 export default function main(state = initialState, action) {

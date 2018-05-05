@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, DatePicker, Input, Modal } from 'antd';
+import { Button, DatePicker, Input, Modal, Select } from 'antd';
 import { withFormik } from 'formik';
 
 import { required } from '../../utils/validator';
@@ -7,7 +7,7 @@ import './index.css';
 
 class _NewRequestModal extends React.Component {
 
-  onChangeDate = (field) => (value) => {
+  onChange = (field) => (value) => {
     this.props.setFieldValue(field, value);
   }
 
@@ -31,9 +31,11 @@ class _NewRequestModal extends React.Component {
         <div>
           <Input placeholder="Location" name="location" onBlur={handleBlur} onChange={handleChange} value={values.location} />
           <Input placeholder="Description" name="description" className="mt-xxs" onBlur={handleBlur} onChange={handleChange} value={values.description} />
-          <DatePicker placeholder="Required date" className="mt-xxs" onChange={this.onChangeDate('requiredDate')} value={values.requiredDate} />
-          <DatePicker placeholder="Last date" className="mt-xxs" onChange={this.onChangeDate('lastDate')} value={values.lastDate} />
-          <Input placeholder="Supplier" className="mt-xxs" name="supplier" onBlur={handleBlur} onChange={handleChange} value={values.supplier} />
+          <DatePicker placeholder="Required date" className="mt-xxs" onChange={this.onChange('requiredDate')} value={values.requiredDate} />
+          <DatePicker placeholder="Last date" className="mt-xxs" onChange={this.onChange('lastDate')} value={values.lastDate} />
+          <Select placeholder="Supplier" onChange={this.onChange('supplier')} className="mt-xxs full-width" value={values.supplier}>
+            {this.props.suppliers.map(supplier => (<Select.Option value={supplier.id}>{supplier.firstName} {supplier.lastName}</Select.Option>))}
+          </Select>
           <div className="text-right">
             <Button type="primary" className="mt-xs" disabled={Object.keys(errors).length || !dirty} onClick={handleSubmit}>Create</Button>
           </div>

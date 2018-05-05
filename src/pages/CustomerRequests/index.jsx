@@ -91,8 +91,12 @@ class CustomerRequests extends React.Component {
             <Table columns={this.columns} dataSource={this.props.customerRequests} />
           </Card>
         </div>
-        <NewRequestModal visible={this.state.modalOpen} onSubmit={this.onCreateRequest} onCancel={() => this.setState({modalOpen: false})} />
-
+        <NewRequestModal
+          visible={this.state.modalOpen}
+          onSubmit={this.onCreateRequest}
+          onCancel={() => this.setState({modalOpen: false})}
+          suppliers={this.props.suppliers}
+        />
       </div>
     );
   }
@@ -101,6 +105,7 @@ class CustomerRequests extends React.Component {
 function mapStateToProps(state) {
   return {
     customerRequests: state.main.customerRequests,
+    suppliers: state.main.suppliers,
   };
 }
 

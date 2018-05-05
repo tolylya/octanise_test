@@ -4,6 +4,9 @@ import { Button, Card, notification, Table, Modal } from 'antd';
 import Menu from '../../components/Menu';
 import NewRequestModal from './NewRequestModal';
 import './index.css';
+import { newCustomerRequest } from '../../actions/mainActions';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 class CustomerRequests extends React.Component {
 
@@ -42,32 +45,15 @@ class CustomerRequests extends React.Component {
     },
   }];
 
-  data = [
-    {
-    key: Math.random(),
-    location: 'Odessa',
-    description: 'Work with water',
-    requiredDate: '12-11-2018',
-    lastDate: '22-11-2018',
-    supplier: 'Anatoliy Simonov',
-    status: 'Pending'
-  }, {
-    key: Math.random(),
-    location: 'Odessa',
-    description: 'Work with water',
-    requiredDate: '12-11-2018',
-    lastDate: '22-11-2018',
-    supplier: 'Anatoliy Simonov',
-    status: 'Approved'
-  }];
-
   onCreateRequest = (values) => {
     const body = {
       ...values,
       requiredDate: values.requiredDate.format('DD-MM-YYYY'),
       lastDate: values.lastDate.format('DD-MM-YYYY'),
+      status: 'Pending',
     };
 
+    this.props.actions.newCustomerRequest(body);
     this.setState({ modalOpen: false, lastRequest: body }, this.openNotification);
   };
 
@@ -102,7 +88,7 @@ class CustomerRequests extends React.Component {
         <Menu current="customer_requests"/>
         <div className="mt-l">
           <Card title="Requests" extra={<Button type="primary" onClick={() => this.setState({modalOpen: true})}>New request</Button>}>
-            <Table columns={this.columns} dataSource={this.data} />
+            <Table columns={this.columns} dataSource={this.props.customerRequests} />
           </Card>
         </div>
         <NewRequestModal visible={this.state.modalOpen} onSubmit={this.onCreateRequest} onCancel={() => this.setState({modalOpen: false})} />
@@ -112,4 +98,19 @@ class CustomerRequests extends React.Component {
   }
 }
 
-export default CustomerRequests;
+function mapStateToProps(state) {
+  return {
+    customerRequests: state.main.customerRequests,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({newCustomerRequest}, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CustomerRequests);

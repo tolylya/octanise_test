@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Card, Table } from 'antd';
+import { Button, Card, notification, Table, Modal } from 'antd';
 
 import Menu from '../../components/Menu';
 import NewRequestModal from './NewRequestModal';
@@ -8,8 +8,9 @@ import './index.css';
 class CustomerRequests extends React.Component {
 
   state = {
-    modalOpen: false
-  }
+    modalOpen: false,
+    lastRequest: {}
+  };
 
   columns = [
     {
@@ -61,7 +62,38 @@ class CustomerRequests extends React.Component {
   }];
 
   onCreateRequest = (values) => {
-    this.setState({ modalOpen: false })
+    const body = {
+      ...values,
+      requiredDate: values.requiredDate.format('DD-MM-YYYY'),
+      lastDate: values.lastDate.format('DD-MM-YYYY'),
+    };
+
+    this.setState({ modalOpen: false, lastRequest: body }, this.openNotification);
+  };
+
+  openEmailModal = (values) => {
+    Modal.info({
+      title: 'Email',
+      content: (
+        <div>
+          <h1>You had new request.</h1>
+          <h2>Location: {values.location}</h2>
+          <div>Description: {values.description}</div>
+          <div>Required date: {values.requiredDate}</div>
+          <div>Last date: {values.lastDate}</div>
+        </div>
+      ),
+    });
+  }
+
+  openNotification = () => {
+    notification.success({
+      message: 'Email',
+      description: <span>
+        Email about new request was sent to supplier. If you want to look at it press the button
+        <Button className="mt-xxs" type="primary" onClick={() => this.openEmailModal(this.state.lastRequest)}>Open email</Button>
+      </span>
+    });
   };
 
   render() {
@@ -74,6 +106,7 @@ class CustomerRequests extends React.Component {
           </Card>
         </div>
         <NewRequestModal visible={this.state.modalOpen} onSubmit={this.onCreateRequest} onCancel={() => this.setState({modalOpen: false})} />
+
       </div>
     );
   }

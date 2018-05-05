@@ -17,7 +17,8 @@ class _NewRequestModal extends React.Component {
       handleChange,
       handleBlur,
       handleSubmit,
-      dirty
+      dirty,
+      values,
     } = this.props;
 
     return (
@@ -27,12 +28,12 @@ class _NewRequestModal extends React.Component {
         footer={null}
         onCancel={this.props.onCancel}
       >
-        <div className="">
-          <Input placeholder="Location" name="location" onBlur={handleBlur} onChange={handleChange} />
-          <Input placeholder="Description" name="description" className="mt-xxs" onBlur={handleBlur} onChange={handleChange} />
-          <DatePicker placeholder="Required date" className="mt-xxs" onChange={this.onChangeDate('requiredDate')} />
-          <DatePicker placeholder="Last date" className="mt-xxs" onChange={this.onChangeDate('lastDate')} />
-          <Input placeholder="Supplier" className="mt-xxs" name="supplier" onBlur={handleBlur} onChange={handleChange} />
+        <div>
+          <Input placeholder="Location" name="location" onBlur={handleBlur} onChange={handleChange} value={values.location} />
+          <Input placeholder="Description" name="description" className="mt-xxs" onBlur={handleBlur} onChange={handleChange} value={values.description} />
+          <DatePicker placeholder="Required date" className="mt-xxs" onChange={this.onChangeDate('requiredDate')} value={values.requiredDate} />
+          <DatePicker placeholder="Last date" className="mt-xxs" onChange={this.onChangeDate('lastDate')} value={values.lastDate} />
+          <Input placeholder="Supplier" className="mt-xxs" name="supplier" onBlur={handleBlur} onChange={handleChange} value={values.supplier} />
           <div className="text-right">
             <Button type="primary" className="mt-xs" disabled={Object.keys(errors).length || !dirty} onClick={handleSubmit}>Create</Button>
           </div>
@@ -43,7 +44,7 @@ class _NewRequestModal extends React.Component {
 }
 
 const NewRequestModal = withFormik({
-  mapPropsToValues: props => ({ location: '', description: '', requiredDate: '', lastDate: '', supplier: '' }),
+  mapPropsToValues: props => ({ location: '', description: '', requiredDate: null, lastDate: null, supplier: '' }),
   validate: (values) => {
     const errors = {};
 
@@ -62,8 +63,9 @@ const NewRequestModal = withFormik({
 
     return errors;
   },
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, {props, resetForm}) => {
     props.onSubmit(values);
+    resetForm();
   }
 })(_NewRequestModal);
 

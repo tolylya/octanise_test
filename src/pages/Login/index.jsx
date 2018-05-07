@@ -2,10 +2,41 @@ import * as React from 'react';
 import { Link } from 'react-router';
 import { Button, Input } from 'antd';
 import { withFormik } from 'formik';
+import { connect } from 'react-redux';
 
 import { required, isEmail } from '../../utils/validator';
 import './index.css';
+import { login, setCurrentUser } from '../../actions/mainActions';
+import { saveToken } from '../../utils/token';
 
+@connect(null, {
+  setCurrentUser
+})
+@withFormik({
+  mapPropsToValues: props => ({ email: '', password: '' }),
+  validate: (values) => {
+    const errors = {};
+
+    if (!isEmail(values.email)) {
+      errors.email = 'Incorrect email';
+    } else if (required(values.email)) {
+      errors.email = 'Required field';
+    }
+    if (required(values.password)) {
+      errors.password = 'Required field';
+    }
+
+    return errors;
+  },
+  handleSubmit: (values, {props}) => {
+    login(values)
+      .then(({token, user}) => {
+        saveToken(token);
+        this.props.setCurrentUser(user);
+      })
+      .then(props.router.push('customer/requests'));
+  }
+})
 class _Login extends React.Component {
   render() {
     const {
@@ -31,25 +62,4 @@ class _Login extends React.Component {
   }
 }
 
-const Login = withFormik({
-  mapPropsToValues: props => ({ email: '', password: '' }),
-  validate: (values) => {
-    const errors = {};
-
-    if (!isEmail(values.email)) {
-      errors.email = 'Incorrect email';
-    } else if (required(values.email)) {
-      errors.email = 'Required field';
-    }
-    if (!required(values.password)) {
-      errors.email = 'Required field';
-    }
-
-    return errors;
-  },
-  handleSubmit: (values, {props}) => {
-
-  }
-})(_Login);
-
-export default Login;
+export default _Login;

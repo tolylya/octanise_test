@@ -34,7 +34,7 @@ class _NewRequestModal extends React.Component {
           <DatePicker placeholder="Required date" className="mt-xxs" onChange={this.onChange('requiredDate')} value={values.requiredDate} />
           <DatePicker placeholder="Last date" className="mt-xxs" onChange={this.onChange('lastDate')} value={values.lastDate} />
           <Select placeholder="Supplier" onChange={this.onChange('supplier')} className="mt-xxs full-width" value={values.supplier}>
-            {this.props.suppliers.map(supplier => (<Select.Option value={supplier.id}>{supplier.firstName} {supplier.lastName}</Select.Option>))}
+            {this.props.suppliers.map(supplier => (<Select.Option key={supplier.id} value={supplier.id}>{supplier.firstName} {supplier.lastName}</Select.Option>))}
           </Select>
           <div className="text-right">
             <Button type="primary" className="mt-xs" disabled={Object.keys(errors).length || !dirty} onClick={handleSubmit}>Create</Button>

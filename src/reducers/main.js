@@ -1,7 +1,12 @@
-import { NEW_CUSTOMER_REQUEST } from '../actions/mainActionTypes';
+import { NEW_CUSTOMER_REQUEST, SET_CURRENT_USER } from '../actions/mainActionTypes';
 
 export const initialState = {
-  currentUser: {},
+  currentUser: {
+    firstName: 'Anatoliy',
+    lastName: 'Simonov',
+    email: 'test@mail.ru',
+    id: 2
+  },
   customerRequests: [{
     key: Math.random(),
     location: 'Odessa',
@@ -20,9 +25,13 @@ export const initialState = {
     status: 'Approved'
   }],
   suppliers: [
-    { firstName: 'Anatoliy', lastName: 'Simonov', email: 'test@mail.ru', supplierName: 'OOO Builder', phone: '+380647458745', id: Math.random() },
-    { firstName: 'Dmitry', lastName: 'Shatikov', email: 'test2@mail.ru', supplierName: 'OOO Skynet', phone: '+380627538745', id: Math.random() },
+    { firstName: 'Anatoliy', lastName: 'Simonov', email: 'test@mail.ru', supplierName: 'OOO Builder', phone: '+380647458745', id: 2 },
+    { firstName: 'Dmitry', lastName: 'Shatikov', email: 'test2@mail.ru', supplierName: 'OOO Skynet', phone: '+380627538745', id: 3 },
   ],
+  users: {
+    2: { firstName: 'Anatoliy', lastName: 'Simonov', email: 'test@mail.ru', supplierName: 'OOO Builder', phone: '+380647458745', id: 2 },
+    3: { firstName: 'Dmitry', lastName: 'Shatikov', email: 'test2@mail.ru', supplierName: 'OOO Skynet', phone: '+380627538745', id: 3 },
+  }
 };
 
 export default function main(state = initialState, action) {
@@ -31,6 +40,12 @@ export default function main(state = initialState, action) {
       return {
         ...state,
         customerRequests: [...state.customerRequests, action.payload]
+      };
+
+    case SET_CURRENT_USER:
+      return {
+        ...state,
+        currentUser: action.payload,
       };
 
     default:

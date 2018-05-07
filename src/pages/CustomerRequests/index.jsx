@@ -4,7 +4,7 @@ import { Button, Card, notification, Table, Modal } from 'antd';
 import Menu from '../../components/Menu';
 import NewRequestModal from './NewRequestModal';
 import './index.css';
-import { newCustomerRequest } from '../../actions/mainActions';
+import { getCustomerRequests, newCustomerRequest } from '../../actions/mainActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -12,7 +12,8 @@ class CustomerRequests extends React.Component {
 
   state = {
     modalOpen: false,
-    lastRequest: {}
+    lastRequest: {},
+    requests: [],
   };
 
   columns = [
@@ -45,15 +46,23 @@ class CustomerRequests extends React.Component {
     },
   }];
 
+  componentDidMount() {
+    getCustomerRequests(this.props.currentUser.id)
+      .then(requests => this.setState({requests}));
+  }
+
   onCreateRequest = (values) => {
+    const supplier = this.props.users[values.supplier];
     const body = {
       ...values,
       requiredDate: values.requiredDate.format('DD-MM-YYYY'),
       lastDate: values.lastDate.format('DD-MM-YYYY'),
       status: 'Pending',
+      supplier: `${supplier.firstName} ${supplier.lastName}`,
+      supplierId: values.supplier,
     };
 
-    this.props.actions.newCustomerRequest(body);
+    this.props.actions.newCustomerRequest(this.props.currentUser.id, body);
     this.setState({ modalOpen: false, lastRequest: body }, this.openNotification);
   };
 
@@ -83,12 +92,13 @@ class CustomerRequests extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <div>
         <Menu current="customer_requests"/>
         <div className="mt-l">
           <Card title="Requests" extra={<Button type="primary" onClick={() => this.setState({modalOpen: true})}>New request</Button>}>
-            <Table columns={this.columns} dataSource={this.props.customerRequests} />
+            <Table columns={this.columns} dataSource={[...this.props.customerRequests, ...this.state.requests]} />
           </Card>
         </div>
         <NewRequestModal
@@ -106,6 +116,8 @@ function mapStateToProps(state) {
   return {
     customerRequests: state.main.customerRequests,
     suppliers: state.main.suppliers,
+    currentUser: state.main.currentUser,
+    users: state.main.users,
   };
 }
 

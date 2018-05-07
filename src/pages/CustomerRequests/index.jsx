@@ -13,7 +13,6 @@ class CustomerRequests extends React.Component {
   state = {
     modalOpen: false,
     lastRequest: {},
-    requests: [],
   };
 
   columns = [
@@ -47,8 +46,7 @@ class CustomerRequests extends React.Component {
   }];
 
   componentDidMount() {
-    getCustomerRequests(this.props.currentUser.id)
-      .then(({data}) => this.setState({requests: data}));
+    this.props.actions.getCustomerRequests(this.props.currentUser.id);
   }
 
   onCreateRequest = (values) => {
@@ -91,13 +89,13 @@ class CustomerRequests extends React.Component {
   };
 
   render() {
-
+    console.log(this.props);
     return (
       <div>
         <Menu current="customer_requests"/>
         <div className="mt-l">
           <Card title="Requests" extra={<Button type="primary" onClick={() => this.setState({modalOpen: true})}>New request</Button>}>
-            <Table columns={this.columns} dataSource={[...this.props.customerRequests, ...this.state.requests]} />
+            <Table columns={this.columns} dataSource={this.props.customerRequests} />
           </Card>
         </div>
         <NewRequestModal
@@ -122,7 +120,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({newCustomerRequest}, dispatch)
+    actions: bindActionCreators({newCustomerRequest, getCustomerRequests}, dispatch)
   };
 }
 

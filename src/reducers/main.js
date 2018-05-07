@@ -1,4 +1,4 @@
-import { NEW_CUSTOMER_REQUEST, SET_CURRENT_USER } from '../actions/mainActionTypes';
+import { NEW_CUSTOMER_REQUEST, SET_CURRENT_USER, GET_CUSTOMER_REQUESTS } from '../actions/mainActionTypes';
 
 export const initialState = {
   currentUser: {
@@ -40,6 +40,12 @@ export default function main(state = initialState, action) {
       return {
         ...state,
         customerRequests: [...state.customerRequests, action.payload]
+      };
+
+    case GET_CUSTOMER_REQUESTS:
+      return {
+        ...state,
+        customerRequests: [...state.customerRequests, ...action.payload]
       };
 
     case SET_CURRENT_USER:

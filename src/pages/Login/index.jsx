@@ -6,11 +6,10 @@ import { connect } from 'react-redux';
 
 import { required, isEmail } from '../../utils/validator';
 import './index.css';
-import { login, setCurrentUser } from '../../actions/mainActions';
-import { saveToken } from '../../utils/token';
+import { login } from '../../actions/mainActions';
 
 @connect(null, {
-  setCurrentUser
+  login
 })
 @withFormik({
   mapPropsToValues: props => ({ email: '', password: '' }),
@@ -29,11 +28,7 @@ import { saveToken } from '../../utils/token';
     return errors;
   },
   handleSubmit: (values, {props}) => {
-    login(values)
-      .then(({token, user}) => {
-        saveToken(token);
-        this.props.setCurrentUser(user);
-      })
+    props.login(values)
       .then(props.router.push('customer/requests'));
   }
 })

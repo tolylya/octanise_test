@@ -4,13 +4,12 @@ import { withFormik } from 'formik';
 import { connect } from 'react-redux';
 import { required, isEmail } from '../../utils/validator';
 
-import { customerRegister, setCurrentUser } from '../../actions/mainActions';
-import { saveToken } from '../../utils/token';
+import { customerRegister } from '../../actions/mainActions';
 
 import './index.css';
 
 @connect(null, {
-  setCurrentUser
+  customerRegister
 })
 @withFormik({
   mapPropsToValues: props => ({ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' }),
@@ -36,11 +35,7 @@ import './index.css';
     return errors;
   },
   handleSubmit: (values, {props}) => {
-    customerRegister(values)
-      .then(({token, customer}) => {
-        saveToken(token);
-        this.props.setCurrentUser(customer);
-      })
+    props.customerRegister(values)
       .then(props.router.push('customer/requests'));
   }
 })
@@ -53,7 +48,6 @@ class _Register extends React.PureComponent {
       handleSubmit,
       dirty
     } = this.props;
-    console.log(this.props);
 
     return (
       <div className="register_wrapper">

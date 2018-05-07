@@ -5,41 +5,44 @@ import { withFormik } from 'formik';
 import Menu from '../../components/Menu';
 import { isEmail, required } from '../../utils/validator';
 import './index.css';
+import { inviteSupplier } from '../../actions/mainActions';
 
 class _InviteSupplier extends React.Component {
 
-  openEmailModal = () => {
+  openEmailModal = (inviteLink) => {
     Modal.info({
       title: 'Email',
       content: (
         <div>
           <h1>You has invited.</h1>
-          <div><a href="#test" target="_blank">Open invite link</a></div>
+          <div><a href={inviteLink} target="_blank">Open invite link</a></div>
         </div>
       ),
     });
-  }
+  };
 
-  openNotification = () => {
+  openNotification = (inviteLink) => {
     notification.success({
       message: 'Email',
       description: <span>
         Email with invite link was sent to supplier. If you want to look at it press the button
-        <Button className="mt-xxs" type="primary" onClick={() => this.openEmailModal()}>Open email</Button>
+        <Button className="mt-xxs" type="primary" onClick={() => this.openEmailModal(inviteLink)}>Open email</Button>
       </span>
     });
   };
 
   handleSubmit = () => {
-    this.openNotification();
-  }
+    inviteSupplier(this.props.values)
+      .then(({inviteLink}) => this.openNotification(inviteLink))
+      .then(this.props.resetForm);
+  };
 
   render() {
     const {
       errors,
       handleChange,
       handleBlur,
-      dirty
+      dirty,
     } = this.props;
 
     return (

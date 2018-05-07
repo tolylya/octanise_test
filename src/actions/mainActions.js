@@ -34,3 +34,6 @@ export function getCustomerRequests(customerId) {
   return axios.get(`/api/v1/customers/${customerId}`);
 }
 
+export function inviteSupplier(body) {
+  return axios.post('/api/v1/suppliers/invite', body);
+}

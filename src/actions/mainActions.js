@@ -4,12 +4,13 @@ import { NEW_CUSTOMER_REQUEST, SET_CURRENT_USER } from './mainActionTypes';
 
 export function newCustomerRequest(customerId, body) {
   return (dispatch) => {
-    dispatch({
-      type: NEW_CUSTOMER_REQUEST,
-      payload: body
-    });
-
-    return axios.post(`/api/v1/customers/${customerId}`, body);
+    return axios.post(`/api/v1/customers/${customerId}/requests`, body)
+      .then(({data: {request}}) => {
+        dispatch({
+          type: NEW_CUSTOMER_REQUEST,
+          payload: request
+        });
+      });
   };
 }
 
@@ -31,7 +32,7 @@ export function login(body) {
 }
 
 export function getCustomerRequests(customerId) {
-  return axios.get(`/api/v1/customers/${customerId}`);
+  return axios.get(`/api/v1/customers/${customerId}/requests`);
 }
 
 export function inviteSupplier(body) {

@@ -48,7 +48,7 @@ class CustomerRequests extends React.Component {
 
   componentDidMount() {
     getCustomerRequests(this.props.currentUser.id)
-      .then(requests => this.setState({requests}));
+      .then(({data}) => this.setState({requests: data}));
   }
 
   onCreateRequest = (values) => {
@@ -59,7 +59,6 @@ class CustomerRequests extends React.Component {
       lastDate: values.lastDate.format('DD-MM-YYYY'),
       status: 'Pending',
       supplier: `${supplier.firstName} ${supplier.lastName}`,
-      supplierId: values.supplier,
     };
 
     this.props.actions.newCustomerRequest(this.props.currentUser.id, body);
@@ -92,7 +91,7 @@ class CustomerRequests extends React.Component {
   };
 
   render() {
-    console.log(this.props);
+
     return (
       <div>
         <Menu current="customer_requests"/>

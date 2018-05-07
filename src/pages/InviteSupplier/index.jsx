@@ -33,8 +33,10 @@ class _InviteSupplier extends React.Component {
 
   handleSubmit = () => {
     inviteSupplier(this.props.values)
-      .then(({inviteLink}) => this.openNotification(inviteLink))
-      .then(this.props.resetForm);
+      .then(({data}) => {
+        this.openNotification(data.inviteLink);
+        this.props.resetForm();
+      });
   };
 
   render() {
@@ -43,17 +45,18 @@ class _InviteSupplier extends React.Component {
       handleChange,
       handleBlur,
       dirty,
+      values,
     } = this.props;
 
     return (
       <div>
         <Menu current="invite_supplier"/>
         <div className="invite_wrapper mt-l">
-          <Input placeholder="Supplier name" name="supplierName" onBlur={handleBlur} onChange={handleChange} />
-          <Input placeholder="First name" name="firstName" className="mt-xxs" onBlur={handleBlur} onChange={handleChange} />
-          <Input placeholder="Last name" className="mt-xxs" name="lastName" onBlur={handleBlur} onChange={handleChange} />
-          <Input placeholder="Email" className="mt-xxs" name="email" onBlur={handleBlur} onChange={handleChange} />
-          <Input placeholder="Phone" className="mt-xxs" name="phone" onBlur={handleBlur} onChange={handleChange} />
+          <Input placeholder="Supplier name" name="supplierName" onBlur={handleBlur} onChange={handleChange} value={values.supplierName} />
+          <Input placeholder="First name" name="firstName" className="mt-xxs" onBlur={handleBlur} onChange={handleChange} value={values.firstName} />
+          <Input placeholder="Last name" className="mt-xxs" name="lastName" onBlur={handleBlur} onChange={handleChange} value={values.lastName} />
+          <Input placeholder="Email" className="mt-xxs" name="email" onBlur={handleBlur} onChange={handleChange} value={values.email} />
+          <Input placeholder="Phone" className="mt-xxs" name="phone" onBlur={handleBlur} onChange={handleChange} value={values.phone} />
           <Button type="primary" className="mt-xs full-width" disabled={Object.keys(errors).length || !dirty} onClick={this.handleSubmit}>Send invite</Button>
         </div>
       </div>
